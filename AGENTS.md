@@ -47,6 +47,7 @@ When working on code, dependencies, libraries, frameworks, or APIs:
 - Use context7 before implementation if external library behavior is relevant
 - Use context7 during review when checking API usage or framework conventions
 - Prefer context7 over guessing library behavior from memory
+- strip internal identifiers, project names, and file paths from any Context7 query before using
 - Record important findings in WORKFLOW_STATE.md
 
 Do not use chat history as the only source of truth.
