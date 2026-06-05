@@ -112,3 +112,9 @@ body {
   border-radius: 0.75rem;
   background: #fff;
 }
+
+.previewEmbed {
+  width: 100%;
+  height: 600px;
+  border: none;
+}

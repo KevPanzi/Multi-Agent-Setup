@@ -3,11 +3,16 @@
 import { useEffect, useRef, useState } from "react";
 
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024;
-const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png"]);
-const ALLOWED_EXTENSIONS = new Set(["jpg", "jpeg", "png"]);
+const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png", "application/pdf"]);
+const ALLOWED_EXTENSIONS = new Set(["jpg", "jpeg", "png", "pdf"]);
+
+type Preview = {
+  url: string;
+  kind: "image" | "pdf";
+};
 
 export default function Home() {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [preview, setPreview] = useState<Preview | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const previousUrlRef = useRef<string | null>(null);
@@ -25,7 +30,7 @@ export default function Home() {
     const extension = file.name.split(".").pop()?.toLowerCase() ?? "";
 
     if (!ALLOWED_MIME_TYPES.has(file.type) || !ALLOWED_EXTENSIONS.has(extension)) {
-      return "Invalid file type. Please upload a JPG or PNG image.";
+      return "Invalid file type. Please upload a JPG, PNG or PDF.";
     }
 
     if (file.size > MAX_FILE_SIZE_BYTES) {
@@ -53,8 +58,10 @@ export default function Home() {
       URL.revokeObjectURL(previousUrlRef.current);
     }
 
+    const kind: Preview["kind"] = file.type === "application/pdf" ? "pdf" : "image";
+
     previousUrlRef.current = nextUrl;
-    setPreviewUrl(nextUrl);
+    setPreview({ url: nextUrl, kind });
     setErrorMessage(null);
   };
 
@@ -89,11 +96,11 @@ export default function Home() {
           id="image-upload"
           className="hiddenInput"
           type="file"
-          accept="image/jpeg,image/png"
+          accept=".jpg,.jpeg,.png,.pdf,image/jpeg,image/png,application/pdf"
           onChange={handleInputChange}
         />
         <span className="uploadHeading">Click to upload or drag &amp; drop</span>
-        <span className="uploadSubtext">JPG or PNG, up to 5MB</span>
+        <span className="uploadSubtext">JPG, PNG or PDF, up to 5MB</span>
       </label>
 
       {errorMessage ? (
@@ -102,10 +109,19 @@ export default function Home() {
         </p>
       ) : null}
 
-      {previewUrl ? (
+      {preview ? (
         <section className="previewSection">
           <h2 className="previewTitle">Preview</h2>
-          <img className="previewImage" src={previewUrl} alt="Uploaded preview" />
+          {preview.kind === "image" ? (
+            <img className="previewImage" src={preview.url} alt="Uploaded preview" />
+          ) : (
+            <embed
+              className="previewEmbed"
+              src={preview.url}
+              type="application/pdf"
+              title="PDF preview"
+            />
+          )}
         </section>
       ) : null}
     </main>
