@@ -19,9 +19,8 @@ Workflow order:
 4. Implementor makes the change
 5. Reviewer reviews the result
 6. Tester runs relevant tests
-7. security-reviewer – performs security code review
-8. Linter checks formatting/linting
-9. Commit-message writes the final commit message
+7. Linter checks formatting/linting
+8. Commit-message writes the final commit message
 
 Writing rules:
 - Keep entries short and structured
@@ -52,21 +51,3 @@ When working on code, dependencies, libraries, frameworks, or APIs:
 
 Do not use chat history as the only source of truth.
 WORKFLOW_STATE.md is the canonical workflow record.
-
-# Serena usage rules
-
-Serena is the semantic code assistant for this project.
-Prefer Serena's MCP tools over raw grep for any code navigation.
-
-When working with this codebase:
-
-- Use Serena's MCP tools for semantic code navigation and edits instead of guessing.
-- Prefer Serena for:
-  - finding relevant files, modules, and symbols
-  - understanding call graphs and relationships
-  - making structured, multi-file edits
-  - Trace where user input flows through the codebase
-- Only fall back to raw grep/edit/apply_patch when Serena tools are clearly not applicable.
-
-Serena tools are exposed via the MCP server. Use them by name whenever code understanding or structured refactors are needed.
-Record important Serena findings in WORKFLOWSTATE.md.
